@@ -24,16 +24,21 @@ const EmployeeList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      try {
-        const response = await EmployeeService.getEmployees();
-        setEmployees(response.data);
-      } catch (error) {
-        console.log(error);
-      }
+      loadData();        
       setLoading(false);
     };
     fetchData();
+
   }, []);
+
+  const loadData = () => {
+    try {
+      const response = await EmployeeService.getEmployees();
+      setEmployees(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const deleteEmployee = (e, id) => {
     e.preventDefault();
@@ -54,7 +59,11 @@ const EmployeeList = () => {
     saveEmployee.then((response) => {
       console.log(response);
       toast.success("Success")
-      closeModal();
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
+      loadData();
+
     })
       .catch((error) => {
         console.log(error);
@@ -229,7 +238,7 @@ const EmployeeList = () => {
             </tbody>
           )}
         </table>
-        
+
       </div>
     </div >
   );
