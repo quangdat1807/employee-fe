@@ -54,12 +54,17 @@ const EmployeeList = () => {
     saveEmployee.then((response) => {
       console.log(response);
       toast.success("Success")
+      closeModal();
     })
       .catch((error) => {
         console.log(error);
       });
     return saveEmployee;
   };
+
+  const closeModal = () => {
+    setShowModal(false);
+  }
 
 
   return (
