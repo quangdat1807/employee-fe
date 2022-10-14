@@ -24,31 +24,41 @@ const EmployeeList = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      loadData();        
+      try {
+        const response = await EmployeeService.getEmployees();
+        setEmployees(response.data);
+      } catch (error) {
+        console.log(error);
+      }
       setLoading(false);
     };
     fetchData();
-
   }, []);
-
-  const loadData = () => {
-    try {
-      const response = await EmployeeService.getEmployees();
-      setEmployees(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   const deleteEmployee = (e, id) => {
     e.preventDefault();
-    EmployeeService.deleteEmployee(id).then((res) => {
-      if (employees) {
-        setEmployees((prevElement) => {
-          return prevElement.filter((employee) => employee.id !== id);
-        });
-      }
+    confirmAlert({
+      title: "Message Delete",
+      message: "Are you sure ?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => EmployeeService.deleteEmployee(id).then((res) => {
+            if (employees) {
+              setEmployees((prevElement) => {
+                return prevElement.filter((employee) => employee.id !== id);
+              });
+            }
+          })
+        },
+        {
+          label: "No",
+          onClick: () => setShowModal(false),
+        }
+      ]
     });
+    
+    
   };
 
   const onSubmit = (data, e) => {
@@ -60,10 +70,9 @@ const EmployeeList = () => {
       console.log(response);
       toast.success("Success")
       setTimeout(() => {
-        closeModal();
-      }, 2000);
-      loadData();
-
+        closeModal()
+      }, 1000)
+      
     })
       .catch((error) => {
         console.log(error);
@@ -73,6 +82,8 @@ const EmployeeList = () => {
 
   const closeModal = () => {
     setShowModal(false);
+    window.location.reload();
+
   }
 
 
