@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import EmployeeService from "../services/EmployeeService";
 import Employee from "./Employee";
 import toast, { Toaster } from 'react-hot-toast';
-
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 const EmployeeList = () => {
   const {
     register,
